@@ -4,7 +4,10 @@ import br.com.springboot.rest.api.model.Usuario;
 import br.com.springboot.rest.api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // Indica que essa classe é um controlador REST, ou seja, ela vai expor endpoints HTTP
 @RestController
@@ -42,6 +45,16 @@ public class GreetingsController {
 
         return "Usuário, " + nome + " adicionado com sucesso!";
 
+    }
+
+    @GetMapping(value = "listarTodos") // Mapeia requisições GET para o endpoint /listarTodos
+    @ResponseBody // Retorna os dados para o corpo da resposta / retorna um Json
+    public ResponseEntity<List<Usuario>> listarUsuarios(){
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        // Retorna a lista de usuários em Json dentro de uma ResponseEntity com status HTTP 200 (OK)
+        return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
     }
 
 }
