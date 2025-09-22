@@ -3,6 +3,7 @@ package br.com.springboot.rest.api.controller;
 import br.com.springboot.rest.api.model.Usuario;
 import br.com.springboot.rest.api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,20 +33,6 @@ public class GreetingsController {
         return n1 + " + " + n2 + " = " + soma;
     }
 
-    @RequestMapping(value = "/adicionar/{nome}/{idade}", method = RequestMethod.GET)
-   @ResponseStatus(HttpStatus.OK)
-    public String salvarUsuario(@PathVariable String nome, @PathVariable int idade) {
-
-        Usuario usuario = new Usuario();
-
-        usuario.setNome(nome);
-        usuario.setIdade(idade);
-
-        usuarioRepository.save(usuario); // Grava no banco de dados
-
-        return "Usuário, " + nome + " adicionado com sucesso!";
-
-    }
 
     @GetMapping(value = "listarTodos") // Mapeia requisições GET para o endpoint /listarTodos
     @ResponseBody // Retorna os dados para o corpo da resposta / retorna um Json
@@ -57,4 +44,52 @@ public class GreetingsController {
         return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
     }
 
+    @PostMapping (value = "salvar") // Mapea a URl
+    @ResponseBody // Descrição da resposta
+    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){ // Recebe os dados para salvar
+
+        Usuario user = usuarioRepository.save(usuario);
+
+        return new ResponseEntity<Usuario>(user, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "deletar")
+    @ResponseBody
+    public ResponseEntity<String> deletar(@RequestParam Long id){
+
+        usuarioRepository.deleteById(id);
+
+        return new ResponseEntity<String>( "User deletado com sucesso!", HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = "buscarporid")
+    @ResponseBody
+    public ResponseEntity<Usuario> buscarporid(@RequestParam(name = "id") Long id){
+
+        Usuario user = usuarioRepository.findById(id).get();
+
+        return new ResponseEntity<Usuario>(user,HttpStatus.OK);
+    }
+
+    @PutMapping(value = "atualizar")
+    @ResponseBody
+    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario){
+        if(usuario.getId() == null){
+            return new ResponseEntity<String>("Por favor, informe o Id!", HttpStatus.OK);
+
+        }
+        Usuario user = usuarioRepository.saveAndFlush(usuario);
+
+        return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "buscarPorNome")
+    @ResponseBody
+    public ResponseEntity<List<Usuario>> buscarPorNome(@RequestParam(name = "nome") String nome){
+
+        List<Usuario> user = usuarioRepository.buscarPorNome(nome);
+
+        return new ResponseEntity<List<Usuario>>(user, HttpStatus.OK);
+    }
 }
