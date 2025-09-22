@@ -3,7 +3,6 @@ package br.com.springboot.rest.api.controller;
 import br.com.springboot.rest.api.model.Usuario;
 import br.com.springboot.rest.api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

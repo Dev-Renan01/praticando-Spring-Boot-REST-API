@@ -1,0 +1,4 @@
+br\com\springboot\rest\api\repository\UsuarioRepository.class
+br\com\springboot\rest\api\SpringbootRestApiApplication.class
+br\com\springboot\rest\api\controller\GreetingsController.class
+br\com\springboot\rest\api\model\Usuario.class
